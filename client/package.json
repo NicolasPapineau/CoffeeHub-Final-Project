@@ -6,6 +6,7 @@
   "license": "MIT",
   "dependencies": {
     "@material-ui/core": "4.12.4",
+    "@mui/icons-material": "^5.14.18",
     "@mui/material": "^5.14.18",
     "@mui/x-date-pickers": "^6.18.2",
     "dayjs": "^1.11.10",
