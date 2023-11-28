@@ -21,13 +21,15 @@ const signup = async (req, res) => {
         const saltRounds = 10;
         const hashedPassword = await bcrypt.hash(password, saltRounds);
 
-        // Save the user to the database with the hashed password
+        const user = { _id: userId, username, password: hashedPassword, favorites: [] }
+
         const result = await client
             .db('CoffeeHub')
             .collection('users')
-            .insertOne({ _id: userId, username, password: hashedPassword });
+            .insertOne(user);
 
-        res.json({ message: 'User registered successfully', result });
+
+        res.json({ message: 'User registered successfully', user });
     } catch (err) {
         console.log(err);
         res.status(500).json({ message: 'Internal server error' });

@@ -16,14 +16,15 @@ import Container from "@mui/material/Container";
 import CoffeeIcon from "@mui/icons-material/Coffee";
 import SearchBar from "./SearchBar";
 import { Link } from "react-router-dom";
+import { UserContext } from './UserContext';
 
 
 
-function Header() {
+const Header = () => {
     const [anchorElNav, setAnchorElNav] = React.useState(null);
     const [anchorElUser, setAnchorElUser] = React.useState(null);
+    const { user, login, logout } = useContext(UserContext);
 
-    const isAuthenticated = document.cookie.includes("connect.sid");
     
 
     const handleOpenNavMenu = (event) => {
@@ -42,16 +43,11 @@ function Header() {
     };
 
     const handleLogout = () => {
-        fetch('/api/logout')
-            .then((response) => {
-                if (response.ok) {
-                    setAuthenticated(false);
-                }
-            })
-            .catch((error) => {
-                console.error('Logout error:', error);
-            });
+        
+        logout();
+        
     };
+
 
     return (
         <AppBar position="static" sx={{ backgroundColor: "#92612F" }}>
@@ -164,11 +160,11 @@ function Header() {
                     </Box>
                     <SearchBar />
                     <Box sx={{ flexGrow: 0 }}>
-                        {isAuthenticated ? (
+                        {user ? (
                             <>
                                 <Tooltip title="Open settings">
                                     <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                                        <Avatar src="/path-to-profile-image.jpg" />
+                                        <Avatar  />
                                     </IconButton>
                                 </Tooltip>
                                 <Menu

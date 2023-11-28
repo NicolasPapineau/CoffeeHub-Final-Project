@@ -14,8 +14,9 @@ const {
     signup,
     checkUsername,
     login,
-    checkAuth,
-    logout,
+    users,
+    postRecipe,
+    recipes,
 } = require("./handlers")
 
 app.use(session({
@@ -28,14 +29,20 @@ app.use(session({
 app.post("/api/signup", signup);
 app.post("/api/checkUsername", checkUsername);
 app.post('/api/login', login);
-router.get('/api/checkAuth', checkAuth);
-router.post('/api/logout', logout);
+app.get('/api/users', users);
+app.get('/api/recipes', recipes);
+app.post("/api/postRecipe", postRecipe);
 
 
 
-app.get("/api/test", (req, res) => {
-    res.json({ message: "You hit the end point!" });
-});
+
+
+
+
+
+// app.get("/api/test", (req, res) => {
+//     res.json({ message: "You hit the end point!" });
+// });
 
 
 // app.get("/api/testMongo", async (req, res) => {

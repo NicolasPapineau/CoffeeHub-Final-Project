@@ -31,8 +31,14 @@ const login = async (req, res) => {
             return res.status(401).json({ message: 'Invalid username or password' });
         }
 
-        req.session.userId = user._id; // Corrected line
-        return res.status(200).json({ message: 'Login successful', user: { username: user.username } });
+        const userData = {
+            _id: user._id,
+            username: user.username,
+            favorites: user.favorites,
+            // Add other fields as needed
+        };
+
+        return res.status(200).json({ message: 'Login successful', user: userData });
 
     } catch (error) {
         console.error('Login error:', error);

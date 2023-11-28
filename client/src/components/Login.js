@@ -1,17 +1,20 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { Link } from "react-router-dom";
+import { UserContext } from './UserContext';
+
 
 const Login = () => {
-
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const [successMessage, setSuccessMessage] = useState('');
+    const { login } = useContext(UserContext);
 
     const loginUser = async (e) => {
+        e.persist();
         e.preventDefault();
 
-        setError(''); 
+        setError('');
 
         try {
             const response = await fetch("/api/login", {
@@ -33,6 +36,9 @@ const Login = () => {
             setSuccessMessage('Login successful');
 
             const userData = await response.json();
+
+            login(userData.user);  // Corrected variable
+
             console.log('User logged in successfully:', userData);
 
         } catch (loginError) {
@@ -41,13 +47,9 @@ const Login = () => {
         }
     };
 
-
     return (
-
         <div className="login">
-
             <h1>Login</h1>
-
             <form onSubmit={loginUser}>
                 <input
                     name="username"
@@ -69,13 +71,9 @@ const Login = () => {
             </form>
             {error && <p style={{ color: 'red' }}>{error}</p>}
             {successMessage && <p style={{ color: 'green' }}>{successMessage}</p>}
-
-
             <h3>Or <Link to="/signup">Register</Link></h3>
-
-
         </div>
-    )
+    );
 };
 
 export default Login;
