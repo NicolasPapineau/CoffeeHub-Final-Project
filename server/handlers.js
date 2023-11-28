@@ -4,6 +4,7 @@ const login = require("./handlers/login")
 const users = require("./handlers/users")
 const postRecipe = require("./handlers/postRecipe")
 const recipes = require("./handlers/recipes")
+const recipe = require("./handlers/recipe")
 
 module.exports = {
     signup,
@@ -12,4 +13,5 @@ module.exports = {
     users,
     postRecipe,
     recipes,
+    recipe,
 }

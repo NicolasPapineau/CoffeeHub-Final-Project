@@ -50,8 +50,8 @@ const Header = () => {
 
 
     return (
-        <AppBar position="static" sx={{ backgroundColor: "#92612F" }}>
-            <Container maxWidth="vw">
+        <AppBar position="fixed" sx={{ backgroundColor: "#92612F"}}>
+            <Container maxWidth="vw" >
                 <Toolbar disableGutters>
                     <CoffeeIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} />
                     <Typography
@@ -104,11 +104,11 @@ const Header = () => {
                             <MenuItem onClick={handleCloseNavMenu}>
                                 <Typography
                                     component={Link}
-                                    to="/recepies"
+                                    to="/recipes"
                                     textAlign="center"
                                     style={{ textDecoration: "none", color: "inherit" }}
                                 >
-                                    Recepies
+                                    Recipes
                                 </Typography>
                             </MenuItem>
                             <MenuItem onClick={handleCloseNavMenu}>
@@ -144,11 +144,11 @@ const Header = () => {
                     </Typography>
                     <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
                         <Button
-                            href="/recepies"
+                            href="/recipes"
                             onClick={handleCloseNavMenu}
                             sx={{ my: 2, color: "white", display: "block" }}
                         >
-                            Recepies
+                            Recipes
                         </Button>
                         <Button
                             href="/roasters"
@@ -194,7 +194,7 @@ const Header = () => {
                                         </Typography>
                                     </MenuItem>
                                     <MenuItem onClick={handleLogout}>
-                                        <Button sx={{ color: "white" }}>Logout</Button>
+                                        <Button sx={{ color: "black" }}>Logout</Button>
                                     </MenuItem>
                                 </Menu>
                             </>
