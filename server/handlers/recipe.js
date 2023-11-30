@@ -6,7 +6,6 @@ const client = new MongoClient(MONGO_URI);
 
 const recipe = async (req, res) => {
     const { id } = req.params;
-    console.log('Received ID:', id);
 
     try {
         await client.connect();

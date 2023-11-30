@@ -6,6 +6,8 @@ import Login from "./Login";
 import PostRecipe from "./PostRecipe";
 import Recipes from "./Recipes";
 import Recipe from "./Recipe";
+import Favorites from "./Favorites";
+import Calendar from "./Calendar";
 // import { useEffect } from "react";
 
 
@@ -30,7 +32,8 @@ const App = () => {
                 {/* <Route path="/machines" element={<h1>machines</h1>}/> */}
                 <Route path="/recepies" element={<h1>recepies</h1>}/>
                 <Route path="/roasters" element={<h1>roasters</h1>}/>
-                <Route path="/favorites" element={<h1>liked recepies</h1>}/>
+                <Route path="/favorites" element={<Favorites />}/>
+                <Route path="/calendar" element={<Calendar />}/>
                 <Route path="/localroasters" element={<h1>List of local roasters</h1>}/>
             </Routes>  
         </BrowserRouter>

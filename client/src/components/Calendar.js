@@ -1,113 +1,158 @@
-// import * as React from 'react';
-// import dayjs, { Dayjs } from 'dayjs';
-// import Badge from '@mui/material/Badge';
-// import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-// import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-// import { PickersDay, PickersDayProps } from '@mui/x-date-pickers/PickersDay';
-// import { DateCalendar } from '@mui/x-date-pickers/DateCalendar';
-// import { DayCalendarSkeleton } from '@mui/x-date-pickers/DayCalendarSkeleton';
+import React, { useState } from 'react';
+import styled from 'styled-components';
+import { format, startOfMonth, endOfMonth, startOfWeek, endOfWeek, addDays, isSameMonth, isSameDay } from 'date-fns';
 
-// function getRandomNumber(min: number, max: number) {
-//   return Math.round(Math.random() * (max - min) + min);
-// }
 
-// /**
-//  * Mimic fetch with abort controller https://developer.mozilla.org/en-US/docs/Web/API/AbortController/abort
-//  * ⚠️ No IE11 support
-//  */
-// function fakeFetch(date: Dayjs, { signal }: { signal: AbortSignal }) {
-//   return new Promise<{ daysToHighlight: number[] }>((resolve, reject) => {
-//     const timeout = setTimeout(() => {
-//       const daysInMonth = date.daysInMonth();
-//       const daysToHighlight = [1, 2, 3].map(() => getRandomNumber(1, daysInMonth));
+const Calendar = () => {
+    const [currentMonth, setCurrentMonth] = useState(new Date());
 
-//       resolve({ daysToHighlight });
-//     }, 500);
+    const generateCalendar = () => {
+        const startDate = startOfWeek(startOfMonth(currentMonth));
+        const endDate = endOfWeek(endOfMonth(currentMonth));
 
-//     signal.onabort = () => {
-//       clearTimeout(timeout);
-//       reject(new DOMException('aborted', 'AbortError'));
-//     };
-//   });
-// }
+        const calendar = [];
+        let currentDate = startDate;
 
-// const initialValue = dayjs('2022-04-17');
+        while (currentDate <= endDate) {
+            const week = Array(7).fill(0).map(() => {
+                const day = currentDate;
+                currentDate = addDays(currentDate, 1);
+                return day;
+            });
 
-// function ServerDay(props: PickersDayProps<Dayjs> & { highlightedDays?: number[] }) {
-//   const { highlightedDays = [], day, outsideCurrentMonth, ...other } = props;
+            calendar.push(week);
+        }
 
-//   const isSelected =
-//     !props.outsideCurrentMonth && highlightedDays.indexOf(props.day.date()) >= 0;
+        return calendar;
+    };
 
-//   return (
-//     <Badge
-//       key={props.day.toString()}
-//       overlap="circular"
-//       badgeContent={isSelected ? '🌚' : undefined}
-//     >
-//       <PickersDay {...other} outsideCurrentMonth={outsideCurrentMonth} day={day} />
-//     </Badge>
-//   );
-// }
+    const handlePrevMonth = () => {
+        setCurrentMonth((prevMonth) => addDays(startOfMonth(prevMonth), -1));
+    };
 
-// export default function DateCalendarServerRequest() {
-//   const requestAbortController = React.useRef<AbortController | null>(null);
-//   const [isLoading, setIsLoading] = React.useState(false);
-//   const [highlightedDays, setHighlightedDays] = React.useState([1, 2, 15]);
+    const handleNextMonth = () => {
+        setCurrentMonth((prevMonth) => addDays(endOfMonth(prevMonth), 1));
+    };
 
-//   const fetchHighlightedDays = (date: Dayjs) => {
-//     const controller = new AbortController();
-//     fakeFetch(date, {
-//       signal: controller.signal,
-//     })
-//       .then(({ daysToHighlight }) => {
-//         setHighlightedDays(daysToHighlight);
-//         setIsLoading(false);
-//       })
-//       .catch((error) => {
-//         // ignore the error if it's caused by `controller.abort`
-//         if (error.name !== 'AbortError') {
-//           throw error;
-//         }
-//       });
+    const renderHeader = () => {
+        return (
+            <CalendarHeader>
+                <CalendarButton onClick={handlePrevMonth}>&lt;</CalendarButton>
+                <span>{format(currentMonth, 'MMMM yyyy')}</span>
+                <CalendarButton onClick={handleNextMonth}>&gt;</CalendarButton>
+            </CalendarHeader>
+        );
+    };
 
-//     requestAbortController.current = controller;
-//   };
+    const renderDaysOfWeek = () => {
+        const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+        return (
+            <DaysOfWeek>
+                {daysOfWeek.map(day => (
+                    <DayOfWeek key={day}>{day}</DayOfWeek>
+                ))}
+            </DaysOfWeek>
+        );
+    };
 
-//   React.useEffect(() => {
-//     fetchHighlightedDays(initialValue);
-//     // abort request on unmount
-//     return () => requestAbortController.current?.abort();
-//   }, []);
+    const renderCalendarDays = () => {
+        const calendar = generateCalendar();
 
-//   const handleMonthChange = (date: Dayjs) => {
-//     if (requestAbortController.current) {
-//       // make sure that you are aborting useless requests
-//       // because it is possible to switch between months pretty quickly
-//       requestAbortController.current.abort();
-//     }
+        return (
+            <CalendarDays>
+                {calendar.map((week, index) => (
+                    <Week key={index}>
+                        {week.map(day => (
+                            <Day
+                                key={day}
+                                className={`day ${isSameMonth(day, currentMonth) ? 'current-month' : 'other-month'} ${isSameDay(day, new Date()) ? 'today' : ''}`}
+                            >
+                                {format(day, 'd')}
+                            </Day>
+                        ))}
+                    </Week>
+                ))}
+            </CalendarDays>
+        );
+    };
 
-//     setIsLoading(true);
-//     setHighlightedDays([]);
-//     fetchHighlightedDays(date);
-//   };
+    return (
+        <CalendarContainer>
+            {renderHeader()}
+            {renderDaysOfWeek()}
+            {renderCalendarDays()}
+        </CalendarContainer>
+    );
+};
 
-//   return (
-//     <LocalizationProvider dateAdapter={AdapterDayjs}>
-//       <DateCalendar
-//         defaultValue={initialValue}
-//         loading={isLoading}
-//         onMonthChange={handleMonthChange}
-//         renderLoading={() => <DayCalendarSkeleton />}
-//         slots={{
-//           day: ServerDay,
-//         }}
-//         slotProps={{
-//           day: {
-//             highlightedDays,
-//           } as any,
-//         }}
-//       />
-//     </LocalizationProvider>
-//   );
-// }
+const CalendarContainer = styled.div`
+    width: 300px;
+    margin: auto;
+    font-family: 'Arial', sans-serif;
+    background-color: white;
+    border: 1px solid black;
+    border-radius: 10px;
+`;
+
+const CalendarHeader = styled.div`
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    
+    
+`;
+
+const CalendarButton = styled.button`
+    background-color: #ddd;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+`;
+
+const DaysOfWeek = styled.div`
+    display: flex;
+    justify-content: space-between;
+    background-color: #eee;
+    padding: 10px;
+`;
+
+const DayOfWeek = styled.div`
+    width: 30px;
+    text-align: center;
+`;
+
+const CalendarDays = styled.div`
+    display: grid;
+`;
+
+const Week = styled.div`
+    display: flex;    
+`;
+
+const Day = styled.div`
+    width: 30px;
+    height: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 6.4px;
+    cursor: pointer;
+
+    &.current-month {
+        background-color: #fff;
+    }
+
+    &.other-month {
+        color: #999;
+    }
+
+    &.today {
+        background-color: chocolate;
+        color: #fff;
+        border-radius: 50%;
+    }
+`;
+
+
+export default Calendar;

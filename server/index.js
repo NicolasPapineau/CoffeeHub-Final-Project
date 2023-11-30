@@ -18,6 +18,9 @@ const {
     postRecipe,
     recipes,
     recipe,
+    searchRecipes,
+    toggleFavorites,
+    favorites,
 } = require("./handlers")
 
 app.use(session({
@@ -34,7 +37,9 @@ app.get('/api/users', users);
 app.get('/api/recipes', recipes);
 app.post("/api/postRecipe", postRecipe);
 app.get('/api/recipes/:id', recipe);
-
+app.get('/api/searchRecipes', searchRecipes);
+app.post("/api/toggleFavorites/:userId/:recipeId", toggleFavorites);
+app.get('/api/recipes/favorites/:userId', favorites)
 
 
 

@@ -35,7 +35,7 @@ const login = async (req, res) => {
             _id: user._id,
             username: user.username,
             favorites: user.favorites,
-            // Add other fields as needed
+            
         };
 
         return res.status(200).json({ message: 'Login successful', user: userData });
