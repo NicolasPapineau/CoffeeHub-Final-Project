@@ -1,42 +1,38 @@
 const { MongoClient, ObjectId } = require('mongodb');
 require('dotenv').config();
 const { MONGO_URI } = process.env;
+const client = new MongoClient(MONGO_URI);
 
-const toggleFavorites = async (req, res) => {
+const removeFromFavorites = async (req, res) => {
   const { userId, recipeId } = req.params;
-
-  const client = new MongoClient(MONGO_URI);
 
   try {
     await client.connect();
 
     const db = client.db('CoffeeHub');
 
-    // Update the user's favorites array in the database
+    // Update the user's favorites array in the database to remove recipeId
     const result = await db.collection('users').updateOne(
-      { _id: userId }, // Use userId directly
-      { $push: { favorites: recipeId } }
+      { _id: userId },
+      { $pull: { favorites: recipeId } }
     );
 
     if (result.matchedCount === 0) {
-      // User not found
       return res.status(404).json({ error: 'User not found', message: 'User not found' });
     }
 
-    res.json({ message: 'User favorites updated successfully' });
+    res.json({ message: 'Recipe removed from favorites successfully' });
   } catch (error) {
-    console.error('Error updating user favorites:', error);
+    console.error('Error removing recipe from favorites:', error);
 
     if (error.code === 'ENOTFOUND') {
-      // MongoDB connection error
       return res.status(500).json({ error: 'Database connection error', message: 'Internal server error' });
     }
 
-    // Handle other errors
     res.status(500).json({ error: 'Internal server error', message: 'Internal server error' });
   } finally {
     await client.close();
   }
 };
 
-module.exports = toggleFavorites;
+module.exports = removeFromFavorites;

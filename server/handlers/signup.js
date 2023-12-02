@@ -21,7 +21,7 @@ const signup = async (req, res) => {
         const saltRounds = 10;
         const hashedPassword = await bcrypt.hash(password, saltRounds);
 
-        const user = { _id: userId, username, password: hashedPassword, favorites: [] }
+        const user = { _id: userId, username, password: hashedPassword, favorites: [], CoffeeConsumption: [] }
 
         const result = await client
             .db('CoffeeHub')

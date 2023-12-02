@@ -1,97 +1,126 @@
 import React, { useState, useEffect } from 'react';
-import InputBase from '@mui/material/InputBase';
-import SearchIcon from '@mui/icons-material/Search';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-import { useNavigate } from 'react-router-dom';
+import SearchIcon from '@mui/icons-material/Search';
+
+const SearchBarWrapper = styled.div`
+  position: relative;
+`;
+
+const Input = styled.input`
+  padding: 8px;
+  font-size: 16px;
+  width: 100%;
+  box-sizing: border-box;
+  border-radius: 10px;
+  border: none;
+  outline: none;
+  background-color: transparent;
+  color: white;
+
+  &::placeholder {
+    color: #ccc; /* Change this to the desired color */
+  }
+`;
+
+const SearchIconWrapper = styled.span`
+  position: absolute;
+  top: 10%;
+  transform: translateX(-70%);
+  color: white;
+`;
+
+const ResultsList = styled.ul`
+  list-style: none;
+  border-radius: 10px;
+  padding: 0;
+  position: absolute;
+  top: 58%;
+  left: 0;
+  width: 100%;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  background-color: #fff;
+  display: ${(props) => (props.show ? 'block' : 'none')};
+`;
+
+const ResultItem = styled.li`
+  margin: 8px;
+  &:hover {
+    background-color: #f0f0f0;
+  }
+`;
+
+const ResultLink = styled(Link)`
+  text-decoration: none;
+  color: black;
+`;
 
 const SearchBar = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [searchResults, setSearchResults] = useState([]);
-  const [showDropdown, setShowDropdown] = useState(false);
-  const navigate = useNavigate();
+  const [recipes, setRecipes] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    // Fetch recipes when the component mounts
     const fetchRecipes = async () => {
       try {
         const response = await fetch('/api/recipes');
-        if (response.ok) {
-          const result = await response.json();
-          setSearchResults(result.data);
-        } else {
-          console.error('Failed to fetch recipes');
+        if (!response.ok) {
+          throw new Error(`Failed to fetch recipes: ${response.statusText}`);
         }
+        const data = await response.json();
+        setRecipes(data.data);
       } catch (error) {
-        console.error('Error during fetchRecipes:', error);
+        console.error('Error fetching recipes', error);
+        setError('An error occurred while fetching recipes. Please try again later.');
+      } finally {
+        setLoading(false);
       }
     };
 
     fetchRecipes();
-  }, []); // The empty dependency array ensures that the effect runs only once when the component mounts
-
-  const handleSearch = (selectedResult) => {
-    // Redirect to the recipe details page
-    navigate(`/recipe/${selectedResult._id}`);
-  };
-
-  const handleInputChange = (value) => {
-    setSearchTerm(value);
-    setShowDropdown(!!value);
-  };
+  }, []);
 
   useEffect(() => {
-    // Reset search term and hide dropdown after navigation
-    if (!showDropdown) {
-      setSearchTerm('');
-    }
-  }, [showDropdown]);
+    const filteredRecipes = recipes.filter((recipe) =>
+      recipe.title.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+    setSearchResults(filteredRecipes);
+  }, [searchTerm, recipes]);
+
+  const handleInputChange = (e) => {
+    setSearchTerm(e.target.value);
+  };
+
+  const handleItemClick = () => {
+    // Clear search term and hide results when an item is clicked
+    setSearchTerm('');
+  };
 
   return (
-    <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
-      <SearchIcon style={{ color: 'white' }} />
-      <InputBase
-        placeholder="Search..."
+    <SearchBarWrapper>
+      <SearchIconWrapper>
+        <SearchIcon />
+      </SearchIconWrapper>
+      <Input
+        type="text"
+        placeholder="Search for recipes..."
         value={searchTerm}
-        onChange={(e) => handleInputChange(e.target.value)}
-        onFocus={() => setShowDropdown(!!searchTerm)}
-        onBlur={() => setShowDropdown(false)}
-        style={{ color: 'white', width: '100%', maxWidth: '200px' }}
+        onChange={handleInputChange}
+        onClick={() => setSearchTerm('')} // Clear input when clicked
       />
-      {showDropdown && (
-        <DropdownContainer>
-          {searchResults
-            .filter((result) => result.title.toLowerCase().includes(searchTerm.toLowerCase()))
-            .slice(0, 10)
-            .map((result) => (
-              <MenuItem key={result._id} onClick={() => handleSearch(result)}>
-                {result.title}
-              </MenuItem>
-            ))}
-        </DropdownContainer>
-      )}
-    </div>
+      <ResultsList show={searchTerm !== ''}>
+        {searchResults.map((result) => (
+          <ResultItem key={result._id}>
+            <ResultLink to={`/recipe/${result._id}`} onClick={handleItemClick}>
+              {result.title}
+            </ResultLink>
+          </ResultItem>
+        ))}
+      </ResultsList>
+    </SearchBarWrapper>
   );
 };
-
-const DropdownContainer = styled.div`
-  position: absolute;
-  top: 100%;
-  left: 0;
-  width: 100%;
-  max-height: 150px;
-  overflow-y: auto;
-  border: 1px solid #ccc;
-  background-color: #fff;
-  z-index: 1000;
-`;
-
-const MenuItem = styled.div`
-  padding: 8px;
-  color: black;
-  cursor: pointer;
-  &:hover {
-    background-color: #f5f5f5;
-  }
-`;
 
 export default SearchBar;

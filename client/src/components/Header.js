@@ -25,7 +25,6 @@ const Header = () => {
     const [anchorElUser, setAnchorElUser] = React.useState(null);
     const { user, login, logout } = useContext(UserContext);
 
-    
 
     const handleOpenNavMenu = (event) => {
         setAnchorElNav(event.currentTarget);
@@ -43,7 +42,6 @@ const Header = () => {
     };
 
     const handleLogout = () => {
-        
         logout();
         
     };
@@ -193,8 +191,25 @@ const Header = () => {
                                             Favorites
                                         </Typography>
                                     </MenuItem>
+                                    <MenuItem onClick={handleCloseUserMenu}>
+                                        <Typography
+                                            component={Link}
+                                            to="/calendar"
+                                            textAlign="center"
+                                            style={{ textDecoration: "none", color: "inherit" }}
+                                        >
+                                            Calendar
+                                        </Typography>
+                                    </MenuItem>
                                     <MenuItem onClick={handleLogout}>
-                                        <Button sx={{ color: "black" }}>Logout</Button>
+                                    <Typography
+                                            component={Link}
+                                            to="/"
+                                            textAlign="center"
+                                            style={{ textDecoration: "none", color: "inherit" }}
+                                        >
+                                            Logout
+                                        </Typography>
                                     </MenuItem>
                                 </Menu>
                             </>

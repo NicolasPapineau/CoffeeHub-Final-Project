@@ -6,8 +6,11 @@ const postRecipe = require("./handlers/postRecipe")
 const recipes = require("./handlers/recipes")
 const recipe = require("./handlers/recipe")
 const searchRecipes = require('./handlers/searchRecipes')
-const toggleFavorites = require("./handlers/toggleFavorite")
+const addToFavorites = require("./handlers/addToFavorites")
 const favorites = require("./handlers/favorites")
+const checkFavorite = require("./handlers/checkFavorite")
+const removeFromFavorites = require("./handlers/removeFromFavorites")
+
 
 module.exports = {
     signup,
@@ -18,6 +21,9 @@ module.exports = {
     recipes,
     recipe,
     searchRecipes,
-    toggleFavorites,
+    addToFavorites,
     favorites,
+    checkFavorite,
+    removeFromFavorites
+    
 }

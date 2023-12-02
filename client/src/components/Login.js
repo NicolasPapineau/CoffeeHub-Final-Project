@@ -41,6 +41,11 @@ const Login = () => {
 
             console.log('User logged in successfully:', userData);
 
+            setTimeout(() => {
+                // Redirect to the homepage
+                window.location.href = '/';
+            }, 1000);
+
         } catch (loginError) {
             console.error('Login error:', loginError);
             setError('Invalid username or password. Please try again.');

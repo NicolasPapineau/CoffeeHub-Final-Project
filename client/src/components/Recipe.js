@@ -29,16 +29,15 @@ const Recipe = () => {
 
     return (
         <div>
+            
             <h2>{recipe.title}</h2>
             <p>{recipe.description}</p>
-            <ul>
-                <li>
-                    <strong>Ingredients:</strong> {recipe.ingredients}
-                </li>
-                <li>
-                    <strong>Instructions:</strong> {recipe.instructions}
-                </li>
-            </ul>
+            <h3>Ingredients:</h3>
+            <p>{recipe.ingredients}</p>
+            <h3>Instructions:</h3>
+            <p>{recipe.instructions}</p>
+            <p>Recipe submitted by {recipe.username}</p>
+                
         </div>
     );
 };

@@ -4,6 +4,7 @@ const Signup = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [verifyPassword, setVerifyPassword] = useState('');
+    const [successMessage, setSuccessMessage] = useState('');
     const [error, setError] = useState('');
 
     const registerUser = async (e) => {
@@ -66,9 +67,17 @@ const Signup = () => {
                 throw new Error('Failed to register user');
             }
 
+            setSuccessMessage('Registration successful');
+
+
             const registrationData = await response.json();
             // Handle successful registration, e.g., redirect to login page or show a success message
             console.log('User registered successfully:', registrationData);
+
+            setTimeout(() => {
+                window.location.href = '/login';
+            }, 1000);
+
         } catch (registrationError) {
             console.error('Registration error:', registrationError);
             setError('Registration failed. Please try again.');
@@ -103,6 +112,7 @@ const Signup = () => {
                 <input type="submit" value="Register" />
             </form>
             {error && <p style={{ color: 'red' }}>{error}</p>}
+            {successMessage && <p style={{ color: 'green' }}>{successMessage}</p>}
         </div>
     );
 };
