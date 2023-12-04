@@ -104,7 +104,8 @@ const Header = () => {
                                     component={Link}
                                     to="/recipes"
                                     textAlign="center"
-                                    style={{ textDecoration: "none", color: "inherit" }}
+                                    style={{ textDecoration: "none", color: "inherit", fontFamily: "monospace" }}
+                                    
                                 >
                                     Recipes
                                 </Typography>
@@ -114,7 +115,7 @@ const Header = () => {
                                     component={Link}
                                     to="/roasters"
                                     textAlign="center"
-                                    style={{ textDecoration: "none", color: "inherit" }}
+                                    style={{ textDecoration: "none", color: "inherit", fontFamily: "monospace" }}
                                 >
                                     Local Roasters
                                 </Typography>
@@ -144,14 +145,14 @@ const Header = () => {
                         <Button
                             href="/recipes"
                             onClick={handleCloseNavMenu}
-                            sx={{ my: 2, color: "white", display: "block" }}
+                            sx={{ my: 2, color: "white", display: "block" , fontFamily: "monospace"}}
                         >
                             Recipes
                         </Button>
                         <Button
                             href="/roasters"
                             onClick={handleCloseNavMenu}
-                            sx={{ my: 2, color: "white", display: "block" }}
+                            sx={{ my: 2, color: "white", display: "block", fontFamily: "monospace" }}
                         >
                             Local roasters
                         </Button>
@@ -186,7 +187,7 @@ const Header = () => {
                                             component={Link}
                                             to="/favorites"
                                             textAlign="center"
-                                            style={{ textDecoration: "none", color: "inherit" }}
+                                            style={{ textDecoration: "none", color: "inherit", fontFamily: "monospace" }}
                                         >
                                             Favorites
                                         </Typography>
@@ -196,9 +197,29 @@ const Header = () => {
                                             component={Link}
                                             to="/calendar"
                                             textAlign="center"
-                                            style={{ textDecoration: "none", color: "inherit" }}
+                                            style={{ textDecoration: "none", color: "inherit", fontFamily: "monospace" }}
                                         >
                                             Calendar
+                                        </Typography>
+                                    </MenuItem>
+                                    <MenuItem onClick={handleCloseUserMenu}>
+                                        <Typography
+                                            component={Link}
+                                            to="/postrecipe"
+                                            textAlign="center"
+                                            style={{ textDecoration: "none", color: "inherit", fontFamily: "monospace" }}
+                                        >
+                                            Share Recipe
+                                        </Typography>
+                                    </MenuItem>
+                                    <MenuItem onClick={handleCloseUserMenu}>
+                                        <Typography
+                                            component={Link}
+                                            to="/myrecipes"
+                                            textAlign="center"
+                                            style={{ textDecoration: "none", color: "inherit", fontFamily: "monospace" }}
+                                        >
+                                            My Recipes
                                         </Typography>
                                     </MenuItem>
                                     <MenuItem onClick={handleLogout}>
@@ -206,7 +227,7 @@ const Header = () => {
                                             component={Link}
                                             to="/"
                                             textAlign="center"
-                                            style={{ textDecoration: "none", color: "inherit" }}
+                                            style={{ textDecoration: "none", color: "inherit", fontFamily: "monospace" }}
                                         >
                                             Logout
                                         </Typography>

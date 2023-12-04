@@ -2,6 +2,9 @@ import React, { useState, useEffect, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import { UserContext } from './UserContext';
+import styled from 'styled-components';
+import CircularProgress from "@material-ui/core/CircularProgress";
+
 
 const Favorites = () => {
   const { user } = useContext(UserContext);
@@ -11,12 +14,10 @@ const Favorites = () => {
 
   useEffect(() => {
     if (!user || !user.favorites || user.favorites.length === 0) {
-      // No favorites to display
       setLoading(false);
       return;
     }
 
-    // Fetch the details of favorite recipes
     fetch(`/api/recipes/favorites/${user._id}`)
       .then((response) => {
         if (!response.ok) {
@@ -53,7 +54,6 @@ const Favorites = () => {
       const { message } = await response.json();
       console.log(message);
 
-      // Remove the recipe from favorites
       setFavorites((prevFavorites) => prevFavorites.filter((recipe) => recipe._id !== recipeId));
     } catch (error) {
       console.error('Error toggling favorites', error);
@@ -61,18 +61,20 @@ const Favorites = () => {
   };
 
   return (
-    <div>
+    <RecipesPage>
       <h1>Your Favorite Recipes</h1>
       {loading ? (
-        <p>Loading...</p>
+        <Card>
+          <CircularProgress />
+        </Card>
       ) : error ? (
         <p>{error}</p>
       ) : favorites.length === 0 ? (
-        <p>No favorite recipes available.</p>
+        <Card>No favorite recipes available.</Card>
       ) : (
-        <div>
+        <Card>
           {favorites.map((recipe) => (
-            <div key={recipe._id}>
+            <Recipe key={recipe._id}>
               <h2>{recipe.title}</h2>
               <p>{recipe.description}</p>
               <h3>Ingredients:</h3>
@@ -81,18 +83,72 @@ const Favorites = () => {
               <p>{recipe.instructions}</p>
 
               <p>Recipe submitted by {recipe.username}</p>
+              <Icon>
               <Link to={`/recipe/${recipe._id}`}>View Details</Link>
-              {/* Display the outlined FavoriteBorderIcon to indicate that it can be removed from favorites */}
               <FavoriteIcon
-                style={{ marginLeft: '8px', cursor: 'pointer' }}
+                style={{ marginLeft: '8px', cursor: 'pointer' , fontSize: '35px' }}
                 onClick={() => handleToggleFavorite(recipe._id)}
               />
-            </div>
+              </Icon>
+            </Recipe>
           ))}
-        </div>
+        </Card>
       )}
-    </div>
+    </RecipesPage>
   );
 };
 
 export default Favorites;
+
+
+const Icon = styled.div`
+display: flex;
+margin: 10px;
+justify-content: end;
+align-items: center;
+`
+
+const Card = styled.div`
+display: flex;
+justify-content: center;
+margin-bottom: 50px;
+flex-direction: column;
+align-items: center;
+
+
+`
+const RecipesPage = styled.div`
+display: flex;
+flex-direction: column;
+justify-content: center;
+h1{
+  text-align: center;
+}
+
+`
+
+const Recipe = styled.div`
+  display: flex;
+  flex-direction: column;
+  background-color: rgba(255, 255, 240, 0.9);
+  width: 60vw;
+  margin-right: 30px;
+  padding-left: 50px;
+  padding-right: 50px;
+  margin-top: 50px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.4);
+  h2 {
+    font-size: 2em;
+  }
+  p {
+    font-size: 1em;
+    margin-right: 10px;
+  }
+  h3 {
+    font-size: 1.25em;
+  }
+  Link {
+    font-size: 1.25em;
+  }
+`
+

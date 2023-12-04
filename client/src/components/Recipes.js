@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import { UserContext } from './UserContext';
+import styled from 'styled-components'; 
+import CircularProgress from "@material-ui/core/CircularProgress";
 // ... (other imports)
 
 const Recipes = () => {
@@ -55,7 +57,6 @@ const Recipes = () => {
           const { message } = await response.json();
           console.log(message);
       
-          // Update the recipes with the correct favorite status
           setRecipes((prevRecipes) =>
             prevRecipes.map((recipe) =>
               recipe._id === recipeId ? { ...recipe, isFavorite: !isInFavorites } : recipe
@@ -70,31 +71,36 @@ const Recipes = () => {
         const isFavorite = await isRecipeInFavorites(recipe._id);
 
         return (
-            <div key={recipe._id}>
+          <Card>
+            <Recipe key={recipe._id}>
                 <h2>{recipe.title}</h2>
                 <p>{recipe.description}</p>
                 <h3>Ingredients:</h3>
                 <p>{recipe.ingredients}</p>
                 <h3>Instructions:</h3>
                 <p>{recipe.instructions}</p>
-                <p>Recipe submitted by {recipe.username}</p>
-                <Link to={`/recipe/${recipe._id}`}>View Details</Link>
+                <p>Recipe submitted by <strong>{recipe.username}</strong></p>
+                <Icon>
+                <p><Link to={`/recipe/${recipe._id}`}>View Recipe Page.</Link></p>
+                
                 {user ? (
                     isFavorite ? (
                         <FavoriteIcon
-                            style={{ cursor: 'pointer', marginLeft: '8px' }}
+                            style={{ cursor: 'pointer', marginLeft: '8px', fontSize: '35px'  }}
                             onClick={() => handleToggleFavorite(recipe._id)}
                         />
                     ) : (
                         <FavoriteBorderIcon
-                            style={{ cursor: 'pointer', marginLeft: '8px' }}
+                            style={{ cursor: 'pointer', marginLeft: '8px', fontSize: '35px'  }}
                             onClick={() => handleToggleFavorite(recipe._id)}
                         />
                     )
                 ) : (
                     <p>Please <Link to="/login">login</Link> to add favorites</p>
                 )}
-            </div>
+                </Icon>
+            </Recipe>
+            </Card>
         );
     };
 
@@ -116,7 +122,7 @@ const Recipes = () => {
         };
 
         fetchData();
-    }, []); // Run once on component mount
+    }, []);
 
     useEffect(() => {
         const renderRecipes = async () => {
@@ -128,11 +134,13 @@ const Recipes = () => {
     }, [recipes]);
 
     return (
-        <div>
+        <RecipesPage>
             <h1>All Recipes</h1>
-            <p>You can also share your own recipe <Link to={`/postrecipe`}>here</Link>.</p>
+            <Share>You can also share your own recipe <Link to={`/postrecipe`}>here</Link>.</Share>
             {loading ? (
-                <p>Loading...</p>
+                <Card>
+                  <CircularProgress />
+                </Card>
             ) : error ? (
                 <p>{error}</p>
             ) : recipes.length === 0 ? (
@@ -140,8 +148,59 @@ const Recipes = () => {
             ) : (
                 <div>{renderedRecipes}</div>
             )}
-        </div>
+        </RecipesPage>
     );
 };
+
+const Icon = styled.div`
+display: flex;
+margin: 10px;
+justify-content: end;
+align-items: center;
+`
+
+const Card = styled.div`
+display: flex;
+justify-content: center;
+margin-bottom: 50px;
+`
+const RecipesPage = styled.div`
+display: flex;
+flex-direction: column;
+justify-content: center;
+h1{
+  text-align: center;
+}
+`
+const Share = styled.p`
+font-size: 1.25em;
+    text-align: center;
+`
+
+const Recipe = styled.div`
+display: flex;
+  flex-direction: column;
+  background-color: rgba(255, 255, 240, 0.9);
+  width: 60vw;
+  margin-right: 30px;
+  padding-left: 50px;
+  padding-right: 50px;
+  margin-top: 50px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.4);
+  h2 {
+    font-size: 2em;
+  }
+  p {
+    font-size: 1em;
+    margin-right: 10px;
+  }
+  h3 {
+    font-size: 1.25em;
+  }
+  Link {
+    font-size: 1.25em;
+  }
+`
+
 
 export default Recipes;

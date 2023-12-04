@@ -9,7 +9,9 @@ import Recipes from "./Recipes";
 import Recipe from "./Recipe";
 import Favorites from "./Favorites";
 import CoffeeCalendar from "./CoffeeCalendar";
-
+import MyRecipes from "./MyRecipes";
+import Home from "./Home";
+import Roasters from "./Roasters";
 
 
 const App = () => {
@@ -21,16 +23,17 @@ const App = () => {
             <GlobalStyle />
             <Header />
             <Routes>
-                <Route path="/" element={<h1>home</h1>}/>
+                <Route path="/" element={<Home />}/>
                 <Route path="/signup" element={<Signup />}/>
                 <Route path="/login" element={<Login />}/>
                 <Route path="/postrecipe" element={<PostRecipe />}/>
                 <Route path="/recipes" element={<Recipes />}/>
                 <Route path="/recipe/:recipeId" element={<Recipe />} />
-                <Route path="/roasters" element={<h1>roasters</h1>}/>
+                <Route path="/roasters" element={<Roasters />}/>
                 <Route path="/favorites" element={<Favorites />}/>
+                <Route path="/myrecipes" element={<MyRecipes />}/>
                 <Route path="/calendar" element={<CoffeeCalendar />} />
-                <Route path="/localroasters" element={<h1>List of local roasters</h1>}/>
+                
             </Routes>  
         </BrowserRouter>
     );

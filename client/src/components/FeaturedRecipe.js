@@ -1,16 +1,19 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { useParams, Link } from 'react-router-dom';
 import styled from 'styled-components';
+import { UserContext } from './UserContext';
+import { useParams, Link } from 'react-router-dom';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import CircularProgress from "@material-ui/core/CircularProgress";
-import { UserContext } from './UserContext';
 
-const Recipe = () => {
+
+
+const FeaturedRecipe = () => {
+    const [randomRecipe, setRandomRecipe] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
     const { user } = useContext(UserContext);
     const { recipeId } = useParams();
-    const [recipe, setRecipe] = useState(null);
-    const [loading, setLoading] = useState(true);
     const [isFavorite, setIsFavorite] = useState(false);
 
     const isRecipeInFavorites = async (recipeId) => {
@@ -62,17 +65,18 @@ const Recipe = () => {
     };
 
     useEffect(() => {
-        const fetchRecipe = async () => {
+        const fetchRandomRecipe = async () => {
             try {
-                const response = await fetch(`/api/recipes/${recipeId}`);
+                const response = await fetch('/api/randomRecipe');
+
                 if (!response.ok) {
-                    throw new Error(`Failed to fetch recipe with ID ${recipeId}`);
+                    throw new Error(`Failed to fetch random recipe: ${response.statusText}`);
                 }
+
                 const data = await response.json();
-                setRecipe(data.data);
+                setRandomRecipe(data.data);
                 setLoading(false);
 
-                // Check and set favorite status
                 if (user) {
                     const isFavoriteResponse = await fetch(`/api/checkFavorite/${user._id}/${recipeId}`);
                     if (isFavoriteResponse.ok) {
@@ -81,39 +85,36 @@ const Recipe = () => {
                     }
                 }
             } catch (error) {
-                console.error(`Error fetching recipe with ID ${recipeId}`, error);
+                console.error('Error fetching random recipe', error);
+                setError('An error occurred while fetching the random recipe. Please try again later.');
                 setLoading(false);
             }
         };
 
-        fetchRecipe();
+        fetchRandomRecipe();
     }, [recipeId, user]);
-
-    if (loading) {
-        return (
-            <Card>
-                <CircularProgress />
-            </Card>
-        );
-    }
-
-    if (!recipe) {
-        return <p>Recipe not found</p>;
-    }
 
     return (
         <Card>
-
-            <RecipeLayout>
-                <h2>{recipe.title}</h2>
-                <p>{recipe.description}</p>
-                <h3>Ingredients:</h3>
-                <p>{recipe.ingredients}</p>
-                <h3>Instructions:</h3>
-                <p>{recipe.instructions}</p>
-                <p>Recipe submitted by <strong>{recipe.username}</strong>.</p>
+            <h1>Featured Recipe</h1>
+            {loading ? (
+                <Card>
+                <CircularProgress />
+            </Card>
+            ) : error ? (
+                <p>{error}</p>
+            ) : randomRecipe ? (
+                <Card>
+                <RecipeLayout>
+                    <h2>{randomRecipe.title}</h2>
+                    <p>{randomRecipe.description}</p>
+                    <h3>Ingredients:</h3>
+                    <p>{randomRecipe.ingredients}</p>
+                    <h3>Instructions:</h3>
+                    <p>{randomRecipe.instructions}</p>
+                    <p>Recipe submitted by <strong>{randomRecipe.username}</strong>.</p>
                 <Icon>
-
+                <p><Link to={`/recipe/${randomRecipe._id}`}>View Recipe Page.</Link></p>
                     {user ? (
                         isFavorite ? (
                             <FavoriteIcon
@@ -127,12 +128,14 @@ const Recipe = () => {
                             />
                         )
                     ) : (
-                        <p>
-                            Please <Link to="/login">login</Link> to add favorites
-                        </p>
+                        <p>Please <Link to="/login">login</Link> to add favorites</p>
                     )}
                 </Icon>
-            </RecipeLayout>
+                </RecipeLayout>
+                </Card>
+            ) : (
+                <p>No random recipe available.</p>
+            )}
         </Card>
     );
 };
@@ -148,7 +151,11 @@ const Icon = styled.div`
 const Card = styled.div`
   display: flex;
   justify-content: center;
-  margin-bottom: 50px;
+  flex-direction: column;
+  align-items: center;
+  h1 {
+    margin-top:40px;
+  }
 `;
 
 const RecipeLayout = styled.div`
@@ -159,7 +166,8 @@ const RecipeLayout = styled.div`
   margin-right: 30px;
   padding-left: 50px;
   padding-right: 50px;
-  margin-top: 50px;
+  margin-top: 20px;
+  margin-bottom: 70px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.4);
   h2 {
     font-size: 2em;
@@ -176,4 +184,4 @@ const RecipeLayout = styled.div`
   }
 `;
 
-export default Recipe;
+export default FeaturedRecipe;

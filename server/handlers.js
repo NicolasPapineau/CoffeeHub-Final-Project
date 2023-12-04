@@ -10,6 +10,12 @@ const addToFavorites = require("./handlers/addToFavorites")
 const favorites = require("./handlers/favorites")
 const checkFavorite = require("./handlers/checkFavorite")
 const removeFromFavorites = require("./handlers/removeFromFavorites")
+const getCoffeeConsumption = require("./handlers/getCoffeeConsumption")
+const updateCoffeeConsumption = require("./handlers/updateCoffeeConsumption")
+const myRecipes = require("./handlers/myRecipes")
+const deleteRecipe = require("./handlers/deleteRecipe")
+const randomRecipe = require("./handlers/randomRecipe")
+const randomCoffee = require("./handlers/randomCoffee")
 
 
 module.exports = {
@@ -24,6 +30,11 @@ module.exports = {
     addToFavorites,
     favorites,
     checkFavorite,
-    removeFromFavorites
-    
+    removeFromFavorites,
+    getCoffeeConsumption,
+    updateCoffeeConsumption,
+    myRecipes,
+    deleteRecipe,
+    randomRecipe,
+    randomCoffee,
 }
