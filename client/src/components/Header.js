@@ -235,7 +235,7 @@ const Header = () => {
                                 </Menu>
                             </>
                         ) : (
-                            <Button component={Link} to="/login" sx={{ color: "white" }}>
+                            <Button component={Link} to="/login" sx={{ color: "white", fontFamily: "monospace" }}>
                                 Login
                             </Button>
                         )}
