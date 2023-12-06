@@ -66,16 +66,8 @@ app.delete("/api/deleteRecipe/:username/:recipeId", deleteRecipe);
 app.get('/api/randomRecipe', randomRecipe);
 app.get('/api/randomCoffee', randomCoffee);
 
+app.use('/api', createProxyMiddleware({ target: 'https://coffee-hub-final-server.vercel.app', changeOrigin: true }));
 
-const apiProxy = createProxyMiddleware('/api', {
-    target: 'https://coffee-hub-final-server.vercel.app',
-    changeOrigin: true,
-    pathRewrite: {
-        '^/api': '/',  // Preserve the '/api' prefix
-    },
-});
 
-// Use the proxy middleware for /api routes
-app.use('/api', apiProxy);
 
 app.listen(PORT, () => console.log(`Listening on port ${PORT}`));
