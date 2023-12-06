@@ -45,15 +45,6 @@ app.use(cors({
     credentials: true,
   }));
 
-  const apiProxy = createProxyMiddleware('/api', {
-    target: 'https://coffee-hub-final-server.vercel.app',
-    changeOrigin: true,
-    pathRewrite: {
-        '^/api': '',
-    },
-});
-
-app.use('/api', apiProxy);
 
 // endpoint
 app.post("/api/signup", signup);
@@ -74,5 +65,17 @@ app.get('/api/myRecipes/:username', myRecipes);
 app.delete("/api/deleteRecipe/:username/:recipeId", deleteRecipe);
 app.get('/api/randomRecipe', randomRecipe);
 app.get('/api/randomCoffee', randomCoffee);
+
+
+const apiProxy = createProxyMiddleware('/api', {
+    target: 'https://coffee-hub-final-server.vercel.app',
+    changeOrigin: true,
+    pathRewrite: {
+        '^/api': '',
+    },
+});
+
+// Use the proxy middleware for /api routes
+app.use('/api', apiProxy);
 
 app.listen(PORT, () => console.log(`Listening on port ${PORT}`));
