@@ -27,7 +27,7 @@ const MyRecipes = () => {
   useEffect(() => {
     const fetchRecipes = async () => {
       try {
-        const response = await fetch(`/api/myRecipes/${username}`);
+        const response = await fetch(`https://coffee-hub-final-server.vercel.app/api/myRecipes/${username}`);
 
         if (!response.ok) {
           throw new Error(`Failed to fetch recipes: ${response.statusText}`);
@@ -51,7 +51,7 @@ const MyRecipes = () => {
 
   const handleDeleteRecipe = async (recipeId) => {
     try {
-      const response = await fetch(`/api/deleteRecipe/${username}/${recipeId}`, {
+      const response = await fetch(`https://coffee-hub-final-server.vercel.app/api/deleteRecipe/${username}/${recipeId}`, {
         method: 'DELETE',
       });
 

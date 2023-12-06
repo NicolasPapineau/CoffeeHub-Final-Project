@@ -33,7 +33,7 @@ const PostRecipe = () => {
     
 
         try {
-            const response = await fetch('/api/postRecipe', {
+            const response = await fetch('https://coffee-hub-final-server.vercel.app/api/postRecipe', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

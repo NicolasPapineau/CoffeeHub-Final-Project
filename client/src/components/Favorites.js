@@ -18,7 +18,7 @@ const Favorites = () => {
       return;
     }
 
-    fetch(`/api/recipes/favorites/${user._id}`)
+    fetch(`https://coffee-hub-final-server.vercel.app/api/recipes/favorites/${user._id}`)
       .then((response) => {
         if (!response.ok) {
           throw new Error(`Failed to fetch favorite recipes: ${response.statusText}`);
@@ -38,7 +38,7 @@ const Favorites = () => {
 
   const handleToggleFavorite = async (recipeId) => {
     try {
-      const toggleUrl = `/api/toggleFavorites/${user._id}/${recipeId}`;
+      const toggleUrl = `https://coffee-hub-final-server.vercel.app/api/toggleFavorites/${user._id}/${recipeId}`;
 
       const response = await fetch(toggleUrl, {
         method: 'DELETE',

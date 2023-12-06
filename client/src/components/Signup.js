@@ -24,7 +24,7 @@ const Signup = () => {
         }
 
         try {
-            const response = await fetch("/api/checkUsername", {
+            const response = await fetch("https://coffee-hub-final-server.vercel.app/api/checkUsername", {
                 method: "POST",
                 headers: {
                     Accept: "application/json",
@@ -50,7 +50,7 @@ const Signup = () => {
         }
 
         try {
-            const response = await fetch("/api/signup", {
+            const response = await fetch("https://coffee-hub-final-server.vercel.app/api/signup", {
                 method: "POST",
                 headers: {
                     Accept: "application/json",

@@ -15,13 +15,12 @@ const Recipes = () => {
     const [renderedRecipes, setRenderedRecipes] = useState([]);
 
     const isRecipeInFavorites = async (recipeId) => {
-        // Add a check for user
         if (!user) {
           return false;
         }
       
         try {
-          const response = await fetch(`/api/checkFavorite/${user._id}/${recipeId}`);
+          const response = await fetch(`https://coffee-hub-final-server.vercel.app/api/checkFavorite/${user._id}/${recipeId}`);
           const data = await response.json();
       
           if (response.ok) {
@@ -40,7 +39,7 @@ const Recipes = () => {
         try {
           const isInFavorites = await isRecipeInFavorites(recipeId);
       
-          const toggleUrl = `/api/toggleFavorites/${user._id}/${recipeId}`;
+          const toggleUrl = `https://coffee-hub-final-server.vercel.app/api/toggleFavorites/${user._id}/${recipeId}`;
           const method = isInFavorites ? 'DELETE' : 'POST';
       
           const response = await fetch(toggleUrl, {
@@ -107,7 +106,7 @@ const Recipes = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await fetch('/api/recipes');
+                const response = await fetch('https://coffee-hub-final-server.vercel.app/api/recipes');
                 if (!response.ok) {
                     throw new Error(`Failed to fetch recipes: ${response.statusText}`);
                 }

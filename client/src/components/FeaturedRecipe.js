@@ -22,7 +22,7 @@ const FeaturedRecipe = () => {
         }
 
         try {
-            const response = await fetch(`/api/checkFavorite/${user._id}/${recipeId}`);
+            const response = await fetch(`https://coffee-hub-final-server.vercel.app/api/checkFavorite/${user._id}/${recipeId}`);
             const data = await response.json();
 
             if (response.ok) {
@@ -41,7 +41,7 @@ const FeaturedRecipe = () => {
         try {
             const isInFavorites = await isRecipeInFavorites(recipeId);
 
-            const toggleUrl = `/api/toggleFavorites/${user._id}/${recipeId}`;
+            const toggleUrl = `https://coffee-hub-final-server.vercel.app/api/toggleFavorites/${user._id}/${recipeId}`;
             const method = isInFavorites ? 'DELETE' : 'POST';
 
             const response = await fetch(toggleUrl, {
@@ -67,7 +67,7 @@ const FeaturedRecipe = () => {
     useEffect(() => {
         const fetchRandomRecipe = async () => {
             try {
-                const response = await fetch('/api/randomRecipe');
+                const response = await fetch('https://coffee-hub-final-server.vercel.app/api/randomRecipe');
 
                 if (!response.ok) {
                     throw new Error(`Failed to fetch random recipe: ${response.statusText}`);
@@ -78,7 +78,7 @@ const FeaturedRecipe = () => {
                 setLoading(false);
 
                 if (user) {
-                    const isFavoriteResponse = await fetch(`/api/checkFavorite/${user._id}/${recipeId}`);
+                    const isFavoriteResponse = await fetch(`https://coffee-hub-final-server.vercel.app/api/checkFavorite/${user._id}/${recipeId}`);
                     if (isFavoriteResponse.ok) {
                         const isFavoriteData = await isFavoriteResponse.json();
                         setIsFavorite(isFavoriteData.isFavorite);

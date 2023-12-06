@@ -17,7 +17,7 @@ const Login = () => {
         setError("");
 
         try {
-            const response = await fetch("/api/login", {
+            const response = await fetch("https://coffee-hub-final-server.vercel.app/api/login", {
                 method: "POST",
                 headers: {
                     Accept: "application/json",

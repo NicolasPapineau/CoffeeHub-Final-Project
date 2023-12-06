@@ -41,7 +41,7 @@ const CoffeeCalendar = () => {
     const data = { userId, date, coffeeCount };
 
     try {
-      const response = await fetch('/api/updateCoffeeConsumption', {
+      const response = await fetch('https://coffee-hub-final-server.vercel.app/api/updateCoffeeConsumption', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -68,7 +68,7 @@ const CoffeeCalendar = () => {
 
   const fetchCoffeeData = async () => {
     try {
-      const response = await fetch(`/api/getCoffeeConsumption/${userId}`);
+      const response = await fetch(`https://coffee-hub-final-server.vercel.app/api/getCoffeeConsumption/${userId}`);
       if (!response.ok) {
         throw new Error(`Failed to fetch coffee consumption data: ${response.statusText}`);
       }
