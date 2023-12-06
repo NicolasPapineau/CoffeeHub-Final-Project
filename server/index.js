@@ -5,6 +5,7 @@ const { MONGO_URI, SESSION_SECRET } = process.env;
 const session = require('express-session');
 const router = express.Router();
 const cors = require('cors');
+const { createProxyMiddleware } = require('http-proxy-middleware');
 
 const PORT = 8888;
 
@@ -43,6 +44,16 @@ app.use(cors({
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true,
   }));
+
+  const apiProxy = createProxyMiddleware('/api', {
+    target: 'https://coffee-hub-final-server.vercel.app',
+    changeOrigin: true,
+    pathRewrite: {
+        '^/api': '',
+    },
+});
+
+app.use('/api', apiProxy);
 
 // endpoint
 app.post("/api/signup", signup);
