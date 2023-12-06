@@ -1,16 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import CoffeeIcon from "@mui/icons-material/Coffee";
+import Config from './Config';
+
 
 const RandomCoffee = () => {
   const [imageUrl, setImageUrl] = useState('');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+
+
   useEffect(() => {
     const fetchRandomCoffeeImage = async () => {
       try {
-        const response = await fetch('/api/randomCoffee');
+        const response = await fetch('${config.Url}/api/randomCoffee');
 
         if (!response.ok) {
           throw new Error(`Failed to fetch random coffee image: ${response.statusText}`);
