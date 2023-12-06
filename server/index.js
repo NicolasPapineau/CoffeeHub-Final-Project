@@ -71,7 +71,7 @@ const apiProxy = createProxyMiddleware('/api', {
     target: 'https://coffee-hub-final-server.vercel.app',
     changeOrigin: true,
     pathRewrite: {
-        '^/api': '',
+        '^/api': '/',  // Preserve the '/api' prefix
     },
 });
 
