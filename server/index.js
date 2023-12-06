@@ -5,7 +5,6 @@ const { MONGO_URI, SESSION_SECRET } = process.env;
 const session = require('express-session');
 const router = express.Router();
 const cors = require('cors');
-const { createProxyMiddleware } = require('http-proxy-middleware');
 
 const PORT = 8888;
 
@@ -66,15 +65,6 @@ app.delete("/api/deleteRecipe/:username/:recipeId", deleteRecipe);
 app.get('/api/randomRecipe', randomRecipe);
 app.get('/api/randomCoffee', randomCoffee);
 
-const apiProxy = createProxyMiddleware('/api', {
-    target: 'https://coffee-hub-final-server.vercel.app',
-    changeOrigin: true,
-    pathRewrite: {
-        '^/api': '/api',  // Preserve the '/api' prefix
-    },
-});
 
-// Use the proxy middleware for /api routes
-app.use(apiProxy);
 
 app.listen(PORT, () => console.log(`Listening on port ${PORT}`));
