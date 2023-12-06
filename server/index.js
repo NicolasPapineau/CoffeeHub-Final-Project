@@ -4,6 +4,7 @@ require("dotenv").config();
 const { MONGO_URI, SESSION_SECRET } = process.env;
 const session = require('express-session');
 const router = express.Router();
+const cors = require('cors');
 
 const PORT = 8888;
 
@@ -36,6 +37,12 @@ app.use(session({
     resave: false,
     saveUninitialized: true,
 }));
+
+app.use(cors({
+    origin: 'https://coffee-hub-final-client.vercel.app', // Replace with your frontend URL
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    credentials: true,
+  }));
 
 // endpoint
 app.post("/api/signup", signup);
