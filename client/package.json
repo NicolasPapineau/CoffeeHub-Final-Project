@@ -1,6 +1,6 @@
 {
   "name": "client",
-  "proxy": "http://localhost:8888",
+  "proxy": "https://coffee-hub-final-server.vercel.app/",
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
