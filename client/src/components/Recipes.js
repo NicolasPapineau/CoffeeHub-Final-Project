@@ -107,7 +107,7 @@ const Recipes = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await fetch('/api/recipes');
+                const response = await fetch('https://coffee-hub-final-server.vercel.app/api/recipes');
                 if (!response.ok) {
                     throw new Error(`Failed to fetch recipes: ${response.statusText}`);
                 }
