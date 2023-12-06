@@ -75,6 +75,6 @@ const apiProxy = createProxyMiddleware('/api', {
 });
 
 // Use the proxy middleware for /api routes
-app.use('/api', apiProxy);
+app.use(apiProxy);
 
 app.listen(PORT, () => console.log(`Listening on port ${PORT}`));
