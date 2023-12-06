@@ -14,7 +14,7 @@ const RandomCoffee = () => {
   useEffect(() => {
     const fetchRandomCoffeeImage = async () => {
       try {
-        const response = await fetch('${config.Url}/api/randomCoffee');
+        const response = await fetch(`${Config.Url}/api/randomCoffee`);
 
         if (!response.ok) {
           throw new Error(`Failed to fetch random coffee image: ${response.statusText}`);
